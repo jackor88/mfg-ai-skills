@@ -1,0 +1,1 @@
+A collection of 9 AI-powered skills designed to help small and medium manufacturing enterprises digitize their operations. Each skill is packaged as a complete SKILL.md file with workflows, input/output specs, industry knowledge bases, and usage examples.
