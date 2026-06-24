@@ -1,0 +1,86 @@
+<h2>微服务组织方案对比</h2>
+<p class="subtitle">DDD微服务架构下的服务拆分与组织策略</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>细粒度微服务（Fine-grained）</h3>
+      <p>每个业务域拆分为独立服务，API网关聚合，前端BFF层适配。6个核心服务完全独立。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>服务边界最清晰，完全独立部署</li>
+            <li>技术栈选择最灵活</li>
+            <li>团队可以完全并行开发</li>
+            <li>单服务故障影响范围最小</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>运维复杂度最高，6个服务+基础设施</li>
+            <li>服务间调用多，分布式事务复杂</li>
+            <li>初期开发速度慢，重复代码多</li>
+            <li>需要完善的DevOps体系支撑</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>模块化单体→微服务渐进式<span style="background:#22c55e;color:white;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:8px;">推荐</span></h3>
+      <p>初期将用户/租户、计费、ERP集成等通用模块合并为一个业务中台服务，AI核价独立为Python服务；随着业务增长再逐步拆分。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>初期开发速度快，快速验证产品</li>
+            <li>运维复杂度适中，2-3个服务起步</li>
+            <li>事务一致性容易保证</li>
+            <li>模块化设计为后续拆分留好边界</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>需要良好的模块边界设计，否则拆分困难</li>
+            <li>初期技术栈部分锁定（业务中台用Node.js）</li>
+            <li>拆分时需要进行数据迁移</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>按领域分层服务（Layered Services）</h3>
+      <p>分为基础服务层（用户/租户/认证/计费）、核心业务层（核价/成本/跟单）、集成层（ERP对接）三层，层间严格单向依赖。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>架构层次清晰，依赖关系明确</li>
+            <li>基础服务复用性高</li>
+            <li>符合DDD分层架构思想</li>
+            <li>便于统一治理和监控</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>服务数量仍然较多（5-6个）</li>
+            <li>层间调用可能产生性能开销</li>
+            <li>基础服务变更可能影响所有上层服务</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
