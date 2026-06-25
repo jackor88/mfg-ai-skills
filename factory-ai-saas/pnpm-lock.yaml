@@ -117,12 +117,15 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      sql.js:
+        specifier: ^1.14.1
+        version: 1.14.1
       sqljs:
         specifier: 0.0.0-6
         version: 0.0.0-6
       typeorm:
         specifier: ^0.3.19
-        version: 0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(ts-node@10.9.2)
+        version: 0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(sql.js@1.14.1)(ts-node@10.9.2)
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -1190,7 +1193,7 @@ packages:
       '@nestjs/core': 10.4.22(@nestjs/common@10.4.22)(@nestjs/platform-express@10.4.22)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       reflect-metadata: 0.1.14
       rxjs: 7.8.2
-      typeorm: 0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(ts-node@10.9.2)
+      typeorm: 0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(sql.js@1.14.1)(ts-node@10.9.2)
       uuid: 9.0.1
     dev: false
 
@@ -5590,6 +5593,10 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
+  /sql.js@1.14.1:
+    resolution: {integrity: sha512-gcj8zBWU5cFsi9WUP+4bFNXAyF1iRpA3LLyS/DP5xlrNzGmPIizUeBggKa8DbDwdqaKwUcTEnChtd2grWo/x/A==}
+    dev: false
+
   /sqljs@0.0.0-6:
     resolution: {integrity: sha512-jiBNxnJ1s1Fh3Z4VKfvouHg92gXRpIl6mUnvRkMU5US+KoZfwPVjeyt+Lx3JC4fpCXzx5DPwV3P5DE3FoO+5hQ==}
     engines: {node: '>=0.6.0'}
@@ -6180,7 +6187,7 @@ packages:
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  /typeorm@0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(ts-node@10.9.2):
+  /typeorm@0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(sql.js@1.14.1)(ts-node@10.9.2):
     resolution: {integrity: sha512-8T35PzjefOdqc2ZR9mwLQj0pUGp6lQhMbK2EvVMwJVJWlaoHm0v/Q6dThNOZkFchD+0yMg8gwjKM28ePiLSXSQ==}
     engines: {node: '>=16.13.0'}
     hasBin: true
@@ -6250,6 +6257,7 @@ packages:
       reflect-metadata: 0.2.2
       sha.js: 2.4.12
       sql-highlight: 6.1.0
+      sql.js: 1.14.1
       ts-node: 10.9.2(@types/node@20.19.43)(typescript@5.9.3)
       tslib: 2.8.1
       uuid: 11.1.1

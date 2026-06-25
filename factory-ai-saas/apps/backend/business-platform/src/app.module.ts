@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
 import { RbacModule } from './modules/rbac/rbac.module';
+import { QuotationModule } from './modules/quotation/quotation.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -41,6 +42,7 @@ import { DatabaseModule } from './database/database.module';
     TenantModule,
     UserModule,
     RbacModule,
+    QuotationModule,
   ],
   controllers: [AppController],
   providers: [

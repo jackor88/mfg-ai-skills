@@ -11,7 +11,7 @@ export default registerAs(
     if (dbType === 'sqlite') {
       return {
         type: 'sqljs',
-        location: 'factory',
+        location: process.env.SQLITE_PATH || 'factory.db',
         autoSave: true,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
