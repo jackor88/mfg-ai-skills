@@ -15,6 +15,7 @@ import { BillingModule } from './modules/billing/billing.module';
 import { QuotationModule } from './modules/quotation/quotation.module';
 import { OrderModule } from './modules/order/order.module';
 import { CostModule } from './modules/cost/cost.module';
+import { ErpModule } from './modules/erp/erp.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -49,6 +50,7 @@ import { DatabaseModule } from './database/database.module';
     QuotationModule,
     OrderModule,
     CostModule,
+    ErpModule,
   ],
   controllers: [AppController],
   providers: [

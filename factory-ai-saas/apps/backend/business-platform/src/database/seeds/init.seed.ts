@@ -38,6 +38,7 @@ const DEFAULT_PERMISSIONS = [
   { code: 'payment:view', name: '账单查询', group: 'billing', description: '账单明细查询' },
   { code: 'ai:call', name: 'AI调用', group: 'ai', description: '调用AI核价引擎' },
   { code: 'erp:sync', name: 'ERP同步', group: 'integration', description: 'ERP数据同步' },
+  { code: 'system:settings', name: '系统设置', group: 'system', description: '系统配置管理' },
 ];
 
 @Injectable()
