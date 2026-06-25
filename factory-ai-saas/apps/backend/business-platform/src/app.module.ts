@@ -12,6 +12,7 @@ import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuthModule } from './modules/auth/auth.module';
       useFactory: (configService: ConfigService) => configService.get('database')!,
       inject: [ConfigService],
     }),
+    DatabaseModule,
     CommonModule,
     AuthModule,
     TenantModule,

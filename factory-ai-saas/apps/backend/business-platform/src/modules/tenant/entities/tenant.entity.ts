@@ -56,6 +56,6 @@ export class Tenant extends AbstractBaseEntity {
   @Column({ name: 'expire_at', type: 'datetime', nullable: true, comment: '过期时间' })
   expireAt?: Date;
 
-  @Column({ type: 'json', nullable: true, comment: '租户配置' })
+  @Column({ type: 'simple-json', nullable: true, comment: '租户配置' })
   config?: Record<string, any>;
 }
