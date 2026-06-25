@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, IsBoolean, IsNumber, Min, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEnum, IsOptional, IsString, IsBoolean, IsNumber, Min, MaxLength, IsInt } from 'class-validator';
 import { ErpType, SyncEntityType } from '../entities/erp.entity';
 
 export class CreateErpConfigDto {
@@ -147,11 +148,15 @@ export class QuerySyncLogDto {
 
   @ApiPropertyOptional({ description: '页码', default: 1 })
   @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   page?: number;
 
   @ApiPropertyOptional({ description: '每页数量', default: 20 })
   @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   pageSize?: number;
 }

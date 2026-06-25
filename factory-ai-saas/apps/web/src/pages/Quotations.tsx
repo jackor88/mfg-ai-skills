@@ -17,7 +17,9 @@ const { Text } = Typography;
 const STATUS_MAP: Record<string, { color: string; label: string }> = {
   draft: { color: 'default', label: '草稿' },
   pending: { color: 'gold', label: '待审核' },
-  reviewing: { color: 'blue', label: '审核中' },
+  ai_calculating: { color: 'processing', label: 'AI核价中' },
+  completed: { color: 'blue', label: '已核价' },
+  reviewed: { color: 'cyan', label: '已审核' },
   confirmed: { color: 'green', label: '已确认' },
   rejected: { color: 'red', label: '已驳回' },
   cancelled: { color: 'default', label: '已取消' },
@@ -96,28 +98,28 @@ export default function Quotations() {
   };
 
   const columns = [
-    { title: '报价单号', dataIndex: 'quotationNo', width: 140 },
+    { title: '报价单号', dataIndex: 'quoteNo', width: 140 },
     { title: '产品名称', dataIndex: 'productName' },
     { title: '客户', dataIndex: 'customerName', width: 120 },
     { title: '数量', dataIndex: 'quantity', width: 80, align: 'right' as const,
-      render: (v: number) => v?.toLocaleString() },
-    { title: '报价金额', dataIndex: 'totalPrice', width: 120, align: 'right' as const,
-      render: (v: number) => v ? <Text strong>¥{v.toLocaleString()}</Text> : '—' },
-    { title: '状态', dataIndex: 'status', width: 90, align: 'center' as const,
-      render: (s: string) => <Tag color={STATUS_MAP[s]?.color}>{STATUS_MAP[s]?.label}</Tag> },
-    { title: '创建时间', dataIndex: 'createdAt', width: 140,
+      render: (v: number) => v ? Number(v).toLocaleString() : '—' },
+    { title: '报价金额', dataIndex: 'suggestedPrice', width: 120, align: 'right' as const,
+      render: (v: number) => v ? <Text strong>¥{Number(v).toLocaleString()}</Text> : '—' },
+    { title: '状态', dataIndex: 'status', width: 100, align: 'center' as const,
+      render: (s: string) => <Tag color={STATUS_MAP[s]?.color}>{STATUS_MAP[s]?.label || s}</Tag> },
+    { title: '创建时间', dataIndex: 'createdAt', width: 160,
       render: (d: string) => dayjs(d).format('YYYY-MM-DD HH:mm') },
     {
-      title: '操作', width: 240, fixed: 'right' as const,
+      title: '操作', width: 260, fixed: 'right' as const,
       render: (_: any, record: any) => (
         <Space size="small">
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => navigate(`/quotations/${record.id}`)}>查看</Button>
-          {record.status === 'draft' && (
+          {(record.status === 'draft' || record.status === 'rejected') && (
             <Button type="link" size="small" icon={<RobotOutlined />} loading={aiLoading === record.id}
               onClick={() => handleAiCalculate(record.id)}>AI核价</Button>
           )}
-          {record.status === 'draft' && (
-            <Button type="link" size="small" icon={<SendOutlined />} onClick={() => handleSubmit(record.id)}>提交</Button>
+          {record.status === 'completed' && (
+            <Button type="link" size="small" icon={<SendOutlined />} onClick={() => handleSubmit(record.id)}>提交审核</Button>
           )}
           {record.status === 'draft' && (
             <Popconfirm title="确认删除？" onConfirm={() => handleDelete(record.id)}>

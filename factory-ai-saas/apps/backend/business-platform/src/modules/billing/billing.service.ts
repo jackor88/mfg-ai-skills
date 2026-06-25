@@ -262,14 +262,14 @@ export class BillingService {
     return { items, total, page, pageSize, totalPages: Math.ceil(total / pageSize) };
   }
 
-  async checkCanUseAi(): Promise<{ canUse: boolean; reason?: string; remainingQuota: number; balance: number }> {
+  async checkCanUseAi(): Promise<{ available: boolean; canUse: boolean; message?: string; reason?: string; remainingQuota: number; balance: number }> {
     const account = await this.getAccount();
     if (account.quotaCount <= 0) {
-      return { canUse: false, reason: '核价次数不足', remainingQuota: account.quotaCount, balance: account.balance };
+      return { available: false, canUse: false, message: '核价次数不足，请充值', reason: '核价次数不足', remainingQuota: account.quotaCount, balance: account.balance };
     }
     if (account.balance < AI_COST_PER_CALL) {
-      return { canUse: false, reason: '余额不足', remainingQuota: account.quotaCount, balance: account.balance };
+      return { available: false, canUse: false, message: '余额不足，请充值', reason: '余额不足', remainingQuota: account.quotaCount, balance: account.balance };
     }
-    return { canUse: true, remainingQuota: account.quotaCount, balance: account.balance };
+    return { available: true, canUse: true, remainingQuota: account.quotaCount, balance: account.balance };
   }
 }

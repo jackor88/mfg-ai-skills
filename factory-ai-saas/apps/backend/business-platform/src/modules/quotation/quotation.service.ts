@@ -4,6 +4,7 @@ import {
   BadRequestException,
   Inject,
   Logger,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
@@ -19,6 +20,7 @@ import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
 import { QueryQuotationDto } from './dto/query-quotation.dto';
 import { ReviewQuotationDto } from './dto/review-quotation.dto';
+import { BillingService } from '../billing/billing.service';
 
 @Injectable()
 export class QuotationService {
@@ -36,6 +38,8 @@ export class QuotationService {
     @InjectRepository(Process)
     private processRepository: Repository<Process>,
     private tenantContext: TenantContextService,
+    @Inject(forwardRef(() => BillingService))
+    private billingService: BillingService,
   ) {}
 
   private generateQuoteNo(): string {
@@ -163,7 +167,7 @@ export class QuotationService {
 
   async remove(id: string) {
     const quotation = await this.findOne(id);
-    if (quotation.status !== QuotationStatus.DRAFT && quotation.status !== QuotationStatus.REJECTED) {
+    if (![QuotationStatus.DRAFT, QuotationStatus.REJECTED].includes(quotation.status)) {
       throw new BadRequestException('当前状态不允许删除');
     }
     await this.quotationRepository.update(id, { deletedAt: new Date() });
@@ -174,8 +178,13 @@ export class QuotationService {
     const quotation = await this.findOne(id);
     const user = this.tenantContext.getUser();
 
-    if (!quotation.bomItems?.length && !quotation.processes?.length) {
-      throw new BadRequestException('请先填写物料清单和工艺要求');
+    if (![QuotationStatus.DRAFT, QuotationStatus.REJECTED].includes(quotation.status)) {
+      throw new BadRequestException('当前状态不允许AI核价');
+    }
+
+    const aiCheck = await this.billingService.checkCanUseAi();
+    if (!aiCheck.canUse) {
+      throw new BadRequestException(aiCheck.message || 'AI算力不足，请充值后使用');
     }
 
     quotation.status = QuotationStatus.AI_CALCULATING;
@@ -195,12 +204,22 @@ export class QuotationService {
       quotation.status = QuotationStatus.COMPLETED;
 
       const saved = await this.quotationRepository.save(quotation);
+
+      await this.billingService.consumeAiCredits({
+        serviceType: 'calculate_price',
+        amount: 2,
+        count: 1,
+        description: `AI核价：${quotation.productName}（建议报价¥${result.suggestedPrice}）`,
+        quotationId: quotation.id,
+      });
+
       await this.addHistory(id, 'ai_calculate', 'AI核价完成', user);
       return saved;
     } catch (error) {
       this.logger.error('AI核价失败', error);
       quotation.status = QuotationStatus.DRAFT;
       await this.quotationRepository.save(quotation);
+      if (error instanceof BadRequestException) throw error;
       throw new BadRequestException('AI核价失败，请重试');
     }
   }
@@ -316,7 +335,7 @@ AI建议：基于历史同类产品报价对比，建议报价在¥${(suggestedP
     const quotation = await this.findOne(id);
     const user = this.tenantContext.getUser();
 
-    if (quotation.status !== QuotationStatus.COMPLETED) {
+    if (![QuotationStatus.COMPLETED, QuotationStatus.PENDING].includes(quotation.status)) {
       throw new BadRequestException('当前状态不允许审核');
     }
 
@@ -359,13 +378,13 @@ AI建议：基于历史同类产品报价对比，建议报价在¥${(suggestedP
     const quotation = await this.findOne(id);
     const user = this.tenantContext.getUser();
 
-    if (![QuotationStatus.DRAFT, QuotationStatus.REJECTED].includes(quotation.status)) {
-      throw new BadRequestException('当前状态不允许提交');
+    if (quotation.status !== QuotationStatus.COMPLETED) {
+      throw new BadRequestException('请先完成AI核价再提交审核');
     }
 
     quotation.status = QuotationStatus.PENDING;
     const saved = await this.quotationRepository.save(quotation);
-    await this.addHistory(id, 'submit', '提交AI核价', user);
+    await this.addHistory(id, 'submit', '提交审核', user);
     return saved;
   }
 

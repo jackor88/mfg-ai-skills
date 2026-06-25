@@ -100,16 +100,7 @@ export class QuotationController {
   @ApiOperation({ summary: '执行AI核价（消耗1次算力）' })
   @RequirePermissions('quotation:ai_calculate')
   async aiCalculate(@Param('id', ParseUUIDPipe) id: string) {
-    await this.billingService.checkCanUseAi();
-    const result = await this.quotationService.triggerAiCalculate(id);
-    await this.billingService.consumeAiCredits({
-      serviceType: 'calculate_price',
-      amount: 1,
-      count: 1,
-      quotationId: id,
-      description: `AI核价：${result.productName}`,
-    });
-    return result;
+    return this.quotationService.triggerAiCalculate(id);
   }
 
   @Post(':id/review')
