@@ -6,12 +6,9 @@ import {
   Column,
 } from 'typeorm';
 
-export abstract class BaseEntity {
+export abstract class AbstractBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ name: 'tenant_id', nullable: true, comment: '租户ID' })
-  tenantId?: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '创建时间' })
   createdAt: Date;
@@ -27,4 +24,9 @@ export abstract class BaseEntity {
 
   @Column({ name: 'updated_by', nullable: true, length: 36, comment: '更新人ID' })
   updatedBy?: string;
+}
+
+export abstract class BaseEntity extends AbstractBaseEntity {
+  @Column({ name: 'tenant_id', length: 36, comment: '租户ID' })
+  tenantId: string;
 }
