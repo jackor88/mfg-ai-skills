@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      sqljs:
+        specifier: 0.0.0-6
+        version: 0.0.0-6
     devDependencies:
       '@types/node':
         specifier: ^20.10.0
@@ -113,6 +117,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      sqljs:
+        specifier: 0.0.0-6
+        version: 0.0.0-6
       typeorm:
         specifier: ^0.3.19
         version: 0.3.30(better-sqlite3@12.11.1)(ioredis@5.11.1)(mysql2@3.22.5)(ts-node@10.9.2)
@@ -2382,6 +2389,11 @@ packages:
   /colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
 
+  /colors@1.4.0:
+    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
+    engines: {node: '>=0.1.90'}
+    dev: false
+
   /commander@13.1.0:
     resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
@@ -2389,7 +2401,6 @@ packages:
 
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
-    dev: true
 
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
@@ -5577,6 +5588,15 @@ packages:
   /sql-highlight@6.1.0:
     resolution: {integrity: sha512-ed7OK4e9ywpE7pgRMkMQmZDPKSVdm0oX5IEtZiKnFucSF0zu6c80GZBe38UqHuVhTWJ9xsKgSMjCG2bml86KvA==}
     engines: {node: '>=14'}
+    dev: false
+
+  /sqljs@0.0.0-6:
+    resolution: {integrity: sha512-jiBNxnJ1s1Fh3Z4VKfvouHg92gXRpIl6mUnvRkMU5US+KoZfwPVjeyt+Lx3JC4fpCXzx5DPwV3P5DE3FoO+5hQ==}
+    engines: {node: '>=0.6.0'}
+    hasBin: true
+    dependencies:
+      colors: 1.4.0
+      commander: 2.20.3
     dev: false
 
   /stack-utils@2.0.6:

@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
+import * as path from 'path';
 
 export default registerAs(
   'database',
@@ -9,11 +10,12 @@ export default registerAs(
 
     if (dbType === 'sqlite') {
       return {
-        type: 'better-sqlite3',
-        database: process.env.SQLITE_PATH || ':memory:',
+        type: 'sqljs',
+        location: 'factory',
+        autoSave: true,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
-        logging: true,
+        logging: false,
       };
     }
 
