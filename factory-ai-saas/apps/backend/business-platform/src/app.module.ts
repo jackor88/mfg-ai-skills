@@ -12,6 +12,8 @@ import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { QuotationModule } from './modules/quotation/quotation.module';
+import { OrderModule } from './modules/order/order.module';
+import { CostModule } from './modules/cost/cost.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -43,6 +45,8 @@ import { DatabaseModule } from './database/database.module';
     UserModule,
     RbacModule,
     QuotationModule,
+    OrderModule,
+    CostModule,
   ],
   controllers: [AppController],
   providers: [
