@@ -1,0 +1,95 @@
+<h2>工厂AI SaaS平台 - 整体架构</h2>
+<p class="subtitle">渐进式微服务架构（初期3个核心服务起步）</p>
+
+<div class="mockup">
+  <div class="mockup-header">系统架构图</div>
+  <div class="mockup-body" style="padding: 30px; background: #f8fafc;">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="display: inline-block; background: #3b82f6; color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold;">
+        用户层（PC浏览器 / 移动端H5）
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin: 15px 0;">
+      <div style="display: inline-block; background: #8b5cf6; color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold;">
+        CDN / 阿里云SLB（负载均衡）
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+      <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 15px; border-radius: 8px; min-width: 200px; text-align: center;">
+        <div style="font-weight: bold; color: #92400e;">React 前端应用</div>
+        <div style="font-size: 12px; color: #78350f; margin-top: 5px;">Ant Design Pro<br>BFF适配层</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 15px 0;">
+      <div style="display: inline-block; background: #ec4899; color: white; padding: 12px 40px; border-radius: 8px; font-weight: bold;">
+        API网关（阿里云API网关 / Kong）
+      </div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 5px;">认证鉴权 · 限流熔断 · 请求路由 · 日志监控</div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 20px; margin: 25px 0; flex-wrap: wrap;">
+      <div style="background: #dcfce7; border: 2px solid #22c55e; padding: 15px; border-radius: 8px; width: 220px;">
+        <div style="font-weight: bold; color: #166534; text-align: center; margin-bottom: 10px;">🟢 业务中台服务</div>
+        <div style="font-size: 12px; color: #14532d;">
+          <div>• 用户/租户管理</div>
+          <div>• 认证授权（RBAC）</div>
+          <div>• 跟单看板</div>
+          <div>• 成本核算</div>
+          <div>• ERP集成</div>
+          <div>• 计费支付</div>
+          <div style="margin-top: 8px; color: #15803d; font-style: italic;">NestJS · Node.js</div>
+        </div>
+      </div>
+      
+      <div style="background: #dbeafe; border: 2px solid #3b82f6; padding: 15px; border-radius: 8px; width: 220px;">
+        <div style="font-weight: bold; color: #1e40af; text-align: center; margin-bottom: 10px;">🔵 AI核价引擎服务</div>
+        <div style="font-size: 12px; color: #1e3a8a;">
+          <div>• 成本计算模型</div>
+          <div>• AI报价推荐</div>
+          <div>• 工艺参数优化</div>
+          <div>• 历史价格分析</div>
+          <div style="margin-top: 8px; color: #2563eb; font-style: italic;">FastAPI · Python</div>
+        </div>
+      </div>
+      
+      <div style="background: #f3e8ff; border: 2px solid #a855f7; padding: 15px; border-radius: 8px; width: 220px;">
+        <div style="font-weight: bold; color: #6b21a8; text-align: center; margin-bottom: 10px;">🟣 消息与任务服务</div>
+        <div style="font-size: 12px; color: #581c87;">
+          <div>• 异步消息队列</div>
+          <div>• 定时任务调度</div>
+          <div>• 事件总线</div>
+          <div>• 数据同步</div>
+          <div style="margin-top: 8px; color: #9333ea; font-style: italic;">RabbitMQ · Redis</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 15px 0;">
+      <div style="display: inline-block; background: #64748b; color: white; padding: 10px 30px; border-radius: 8px; font-weight: bold; font-size: 14px;">
+        阿里云基础设施层
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">RDS (MySQL)</div>
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">Redis</div>
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">RabbitMQ</div>
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">OSS对象存储</div>
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">ACK容器服务</div>
+      <div style="background: white; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 6px; font-size: 12px;">ARMS监控</div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 30px;">
+  <h3>关键设计决策说明</h3>
+  <ul>
+    <li><strong>初期3个服务起步</strong>：业务中台（NestJS）+ AI核价引擎（FastAPI）+ 消息队列基础设施，降低初期运维复杂度</li>
+    <li><strong>模块化预留拆分点</strong>：业务中台内部按DDD限界上下文划分模块，未来可独立拆分为微服务</li>
+    <li><strong>混合部署支持</strong>：基于K8s容器化，一套镜像同时支持公有云SaaS和私有部署</li>
+    <li><strong>AI服务独立</strong>：核价引擎用Python独立部署，便于模型迭代、GPU资源调度和团队分工</li>
+  </ul>
+</div>

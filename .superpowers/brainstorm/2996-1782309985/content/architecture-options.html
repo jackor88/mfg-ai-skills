@@ -1,0 +1,90 @@
+<h2>整体架构方案对比</h2>
+<p class="subtitle">选择适合工厂AI SaaS平台的技术架构</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>模块化单体（Modular Monolith）</h3>
+      <p>核心业务在一个代码库内按模块划分，通过内部API调用。AI核价引擎作为独立Python服务。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>开发速度最快，部署简单</li>
+            <li>初期运维成本低</li>
+            <li>事务一致性容易保证</li>
+            <li>调试和排错简单</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>模块边界不清晰时易成"大泥球"</li>
+            <li>后期拆分微服务成本高</li>
+            <li>单模块故障可能影响整体</li>
+            <li>技术栈锁定在Node.js</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>领域驱动微服务（DDD Microservices）<span style="background:#22c55e;color:white;padding:2px 8px;border-radius:4px;font-size:12px;margin-left:8px;">推荐</span></h3>
+      <p>按业务域拆分独立服务：用户/租户、核价引擎、跟单看板、成本核算、ERP集成、计费支付。通过API网关通信，异步消息解耦。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>各服务可独立部署、扩缩容</li>
+            <li>核价用Python(FastAPI)，业务用Node(NestJS)</li>
+            <li>技术栈灵活，AI服务可独立迭代</li>
+            <li>故障隔离，单服务崩溃不影响全局</li>
+            <li>团队可并行开发</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>初期架构复杂度较高</li>
+            <li>需要服务发现、链路追踪等基础设施</li>
+            <li>分布式事务处理复杂</li>
+            <li>运维需要K8s/容器化能力</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Serverless + 微服务混合</h3>
+      <p>业务API用NestJS部署在Serverless(阿里云函数/FC)，AI核价用GPU容器服务，前端托管CDN，数据库用云原生托管服务。</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>优势</h4>
+          <ul>
+            <li>按调用量付费，初期成本最低</li>
+            <li>自动弹性伸缩，无需运维服务器</li>
+            <li>AI核价GPU可按需调度</li>
+            <li>高可用由云平台保障</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>劣势</h4>
+          <ul>
+            <li>冷启动问题影响用户体验</li>
+            <li>长连接(WebSocket看板)支持受限</li>
+            <li>厂商锁定严重</li>
+            <li>复杂业务流程编排困难</li>
+            <li>大规模调用时成本可能超预期</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
