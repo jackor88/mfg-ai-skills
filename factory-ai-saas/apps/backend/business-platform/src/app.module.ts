@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { UserModule } from './modules/user/user.module';
 import { RbacModule } from './modules/rbac/rbac.module';
+import { BillingModule } from './modules/billing/billing.module';
 import { QuotationModule } from './modules/quotation/quotation.module';
 import { OrderModule } from './modules/order/order.module';
 import { CostModule } from './modules/cost/cost.module';
@@ -44,6 +45,7 @@ import { DatabaseModule } from './database/database.module';
     TenantModule,
     UserModule,
     RbacModule,
+    BillingModule,
     QuotationModule,
     OrderModule,
     CostModule,

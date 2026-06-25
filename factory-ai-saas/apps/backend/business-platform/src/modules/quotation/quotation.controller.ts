@@ -9,10 +9,13 @@ import {
   Query,
   UseGuards,
   ParseUUIDPipe,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { QuotationService } from './quotation.service';
 import { MasterDataService } from './master-data.service';
+import { BillingService } from '../billing/billing.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
 import { QueryQuotationDto } from './dto/query-quotation.dto';
@@ -37,6 +40,8 @@ export class QuotationController {
   constructor(
     private readonly quotationService: QuotationService,
     private readonly masterDataService: MasterDataService,
+    @Inject(forwardRef(() => BillingService))
+    private readonly billingService: BillingService,
   ) {}
 
   @Post()
@@ -92,10 +97,19 @@ export class QuotationController {
   }
 
   @Post(':id/ai-calculate')
-  @ApiOperation({ summary: '执行AI核价' })
+  @ApiOperation({ summary: '执行AI核价（消耗1次算力）' })
   @RequirePermissions('quotation:ai_calculate')
-  aiCalculate(@Param('id', ParseUUIDPipe) id: string) {
-    return this.quotationService.triggerAiCalculate(id);
+  async aiCalculate(@Param('id', ParseUUIDPipe) id: string) {
+    await this.billingService.checkCanUseAi();
+    const result = await this.quotationService.triggerAiCalculate(id);
+    await this.billingService.consumeAiCredits({
+      serviceType: 'calculate_price',
+      amount: 1,
+      count: 1,
+      quotationId: id,
+      description: `AI核价：${result.productName}`,
+    });
+    return result;
   }
 
   @Post(':id/review')
