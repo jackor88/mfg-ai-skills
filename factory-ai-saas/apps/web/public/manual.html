@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>工厂AI SaaS 平台 · 使用操作手册</title>
+  <style>
+    :root {
+      --primary: #1677ff;
+      --primary-dark: #0958d9;
+      --success: #52c41a;
+      --warning: #faad14;
+      --danger: #ff4d4f;
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    /* 顶部封面 */
+    .cover {
+      background: linear-gradient(135deg, #1677ff 0%, #722ed1 100%);
+      color: #fff;
+      padding: 80px 20px 60px;
+      text-align: center;
+    }
+    .cover h1 { font-size: 2.5em; margin-bottom: 12px; letter-spacing: 2px; }
+    .cover .subtitle { font-size: 1.2em; opacity: .9; margin-bottom: 8px; }
+    .cover .version { font-size: .9em; opacity: .7; margin-top: 16px; }
+    .cover .badge {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: .85em;
+      margin-top: 12px;
+    }
+
+    /* 目录 */
+    .toc-wrap {
+      max-width: 960px;
+      margin: -30px auto 30px;
+      padding: 0 20px;
+    }
+    .toc {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 30px 36px;
+    }
+    .toc h2 { font-size: 1.2em; margin-bottom: 16px; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; }
+    .toc ol { padding-left: 22px; }
+    .toc li { margin-bottom: 8px; }
+    .toc a { color: var(--text); text-decoration: none; transition: color .2s; }
+    .toc a:hover { color: var(--primary); }
+
+    /* 主体内容 */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 20px 60px; }
+    .chapter {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 36px;
+      margin-bottom: 28px;
+    }
+    .chapter h2 {
+      font-size: 1.5em;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .chapter h3 {
+      font-size: 1.15em;
+      color: var(--text);
+      margin: 24px 0 12px;
+      padding-left: 10px;
+      border-left: 3px solid var(--primary);
+    }
+    .chapter p { margin-bottom: 12px; }
+    .chapter ul, .chapter ol { padding-left: 24px; margin-bottom: 14px; }
+    .chapter li { margin-bottom: 6px; }
+
+    /* 截图 */
+    .screenshot {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .screenshot img {
+      max-width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    }
+    .screenshot .caption {
+      font-size: .88em;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* 提示框 */
+    .tip, .note, .warning {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: .95em;
+    }
+    .tip { background: #e6f7ff; border-left: 4px solid var(--primary); }
+    .note { background: #f6ffed; border-left: 4px solid var(--success); }
+    .warning { background: #fffbe6; border-left: 4px solid var(--warning); }
+    .tip::before { content: "💡 技巧："; font-weight: bold; }
+    .note::before { content: "📌 说明："; font-weight: bold; }
+    .warning::before { content: "⚠️ 注意："; font-weight: bold; }
+
+    /* 步骤编号 */
+    .step {
+      display: flex;
+      gap: 14px;
+      margin: 16px 0;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: .95em;
+    }
+    .step-body { flex: 1; }
+
+    /* 表格 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: .95em;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th { background: #f0f5ff; color: var(--primary-dark); font-weight: 600; }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    /* 状态标签 */
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: .85em;
+      margin: 0 2px;
+    }
+    .tag.draft { background:#f0f0f0; color:#595959; }
+    .tag.submitted { background:#e6f7ff; color:#1677ff; }
+    .tag.approved { background:#f6ffed; color:#52c41a; }
+    .tag.rejected { background:#fff2f0; color:#ff4d4f; }
+    .tag.converted { background:#f9f0ff; color:#722ed1; }
+
+    /* 页脚 */
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+      font-size: .88em;
+    }
+
+    /* 回到顶部 */
+    .back-top {
+      position: fixed;
+      right: 30px;
+      bottom: 40px;
+      width: 44px; height: 44px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(22,119,255,.4);
+      display: none;
+      transition: opacity .3s;
+    }
+    .back-top:hover { background: var(--primary-dark); }
+  </style>
+</head>
+<body>
+
+<!-- ============== 封面 ============== -->
+<div class="cover">
+  <h1>🏭 工厂AI SaaS 平台</h1>
+  <div class="subtitle">智能报价 · 高效跟单 · 精准算账</div>
+  <div class="subtitle" style="font-size:1em;opacity:.8;">使 用 操 作 手 册（图文版）</div>
+  <div class="badge">V1.0 适用角色：老板 / 业务 / 财务</div>
+  <div class="version">文档更新日期：2026年6月25日</div>
+</div>
+
+<!-- ============== 目录 ============== -->
+<div class="toc-wrap">
+  <div class="toc">
+    <h2>📖 目录</h2>
+    <ol>
+      <li><a href="#ch1">系统概述与登录</a></li>
+      <li><a href="#ch2">工作台（首页仪表盘）</a></li>
+      <li><a href="#ch3">AI智能报价</a>
+        <ol style="list-style-type:lower-alpha;margin-top:4px;">
+          <li><a href="#ch3-1">主数据管理（客户/物料/工序）</a></li>
+          <li><a href="#ch3-2">新建报价单</a></li>
+          <li><a href="#ch3-3">AI核价（智能成本测算）</a></li>
+          <li><a href="#ch3-4">报价单审核与提交</a></li>
+        </ol>
+      </li>
+      <li><a href="#ch4">订单跟踪</a></li>
+      <li><a href="#ch5">成本核算与利润分析</a></li>
+      <li><a href="#ch6">AI算力充值与消费记录</a></li>
+      <li><a href="#ch7">ERP系统对接与数据同步</a></li>
+      <li><a href="#ch8">常见问题（FAQ）</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ============== 正文 ============== -->
+<div class="container">
+
+  <!-- ===== 第1章 ===== -->
+  <div class="chapter" id="ch1">
+    <h2>第一章　系统概述与登录</h2>
+
+    <h3>1.1 系统简介</h3>
+    <p>工厂AI SaaS平台是一款面向中小型加工厂的云端管理系统，核心解决三大业务痛点：</p>
+    <ul>
+      <li><strong>报价难</strong>：AI自动测算材料、人工、机台、能耗等成本，一键生成报价单。</li>
+      <li><strong>跟单乱</strong>：报价→订单→生产→发货全流程可视化跟踪，状态实时更新。</li>
+      <li><strong>算账糊</strong>：成本/收款/利润自动核算，老板随时掌握真实利润。</li>
+    </ul>
+
+    <h3>1.2 登录系统</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">打开浏览器，在地址栏输入系统访问地址（如 <code>http://your-domain.com</code>），进入登录页面。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">登录页提供三种快捷身份入口：<strong>老板(boss)</strong>、<strong>业务员(sales)</strong>、<strong>财务(finance)</strong>，点击对应按钮即可快速登录（演示环境）。生产环境需输入手机号+密码或验证码登录。</div>
+    </div>
+
+    <div class="screenshot">
+      <img src="/screenshots/01-login.png" alt="登录页面" />
+      <div class="caption">图1-1：系统登录页面（三种角色快捷登录）</div>
+    </div>
+
+    <h3>1.3 角色权限说明</h3>
+    <table>
+      <tr><th>角色</th><th>可使用功能</th><th>不可用功能</th></tr>
+      <tr><td>👑 老板</td><td>全部功能（报价/订单/成本/充值/ERP/设置）</td><td>—</td></tr>
+      <tr><td>🧑‍💼 业务员</td><td>新建报价、提交审核、查看自己的订单</td><td>成本核算、算力充值、ERP配置、系统设置</td></tr>
+      <tr><td>💰 财务</td><td>成本核算、收款记录、算力充值</td><td>新建报价、ERP配置、主数据维护</td></tr>
+    </table>
+
+    <div class="tip">登录后页面右上角会显示当前用户名。如需切换账号，点击右上角头像区域，选择"退出登录"即可返回登录页。</div>
+  </div>
+
+  <!-- ===== 第2章 ===== -->
+  <div class="chapter" id="ch2">
+    <h2>第二章　工作台（首页仪表盘）</h2>
+
+    <p>登录成功后自动进入工作台，这里是您的"经营驾驶舱"，一屏掌握工厂经营全貌。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/02-dashboard.png" alt="工作台仪表盘" />
+      <div class="caption">图2-1：工作台仪表盘（经营数据概览）</div>
+    </div>
+
+    <h3>2.1 顶部数据卡片</h3>
+    <table>
+      <tr><th>卡片名称</th><th>含义说明</th></tr>
+      <tr><td>📄 本月报价单</td><td>当月创建的报价单总数，下方小数字为"待审核"数量</td></tr>
+      <tr><td>🛒 进行中订单</td><td>当前正在执行（生产中/待发货）的订单数，下方小数字为"生产中"数量</td></tr>
+      <tr><td>💵 本月利润</td><td>本月已确认的实际利润金额，下方小数字为利润率</td></tr>
+      <tr><td>🤖 AI算力余额</td><td>当前AI核价账户余额，下方小数字为剩余可用核价次数</td></tr>
+    </table>
+
+    <h3>2.2 趋势图表</h3>
+    <ul>
+      <li><strong>报价/成本趋势图</strong>：展示近7天报价金额与成本金额的对比曲线，帮助判断报价策略是否合理。</li>
+      <li><strong>订单状态分布</strong>：环形图展示各状态订单占比（待审核/生产中/已完成/已发货）。</li>
+    </ul>
+
+    <h3>2.3 最近动态</h3>
+    <p>系统自动记录关键操作（新建报价、AI核价、审核通过、订单转生产等），按时间倒序展示，方便团队协作追踪。</p>
+
+    <div class="note">首次使用时订单状态分布和最近动态区域会显示"暂无数据"，创建报价单并推进流程后将自动生成数据。</div>
+  </div>
+
+  <!-- ===== 第3章 ===== -->
+  <div class="chapter" id="ch3">
+    <h2>第三章　AI智能报价</h2>
+    <p>AI报价模块是系统的核心功能，帮助业务员快速、准确地完成产品报价，告别手工Excel核价。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/03-quotation-list.png" alt="报价单列表" />
+      <div class="caption">图3-1：AI报价单列表页</div>
+    </div>
+
+    <h3 id="ch3-1">3.1 主数据管理</h3>
+    <p>在创建报价单之前，建议先维护好基础主数据（客户、物料、工序），这样在核价时AI能自动调取准确的价格信息。</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">点击报价列表页左上角的 <strong>「主数据」</strong> 按钮，打开主数据管理弹窗。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">弹窗包含三个标签页：<strong>客户 / 物料 / 工序</strong>，分别维护对应的数据。</div>
+    </div>
+
+    <div class="screenshot">
+      <img src="/screenshots/10-masterdata.png" alt="主数据管理" />
+      <div class="caption">图3-2：主数据管理弹窗（客户/物料/工序）</div>
+    </div>
+
+    <p><strong>客户管理：</strong>点击「+ 新增客户」添加客户名称、联系人、电话、地址等信息，后续新建报价单时可直接从下拉框选择。</p>
+    <p><strong>物料管理：</strong>维护原材料/辅料的名称、规格、单价、单位（kg/个/m等），AI核价时会自动计算材料成本。</p>
+    <p><strong>工序管理：</strong>维护各工序名称、标准工时(分钟)、工时单价(元/小时)、机台费率等，用于人工成本和机台成本计算。</p>
+
+    <div class="warning">物料和工序的单价直接影响AI核价结果的准确性，请定期（建议每月）根据采购价格和人工成本进行更新维护。</div>
+
+    <h3 id="ch3-2">3.2 新建报价单</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">在报价列表页，点击右上角的 <strong>「+ 新建报价」</strong> 按钮，弹出新建报价单表单。</div>
+    </div>
+
+    <div class="screenshot">
+      <img src="/screenshots/04-create-quotation.png" alt="新建报价单" />
+      <div class="caption">图3-3：新建报价单弹窗</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">填写报价单信息：
+        <ul>
+          <li><strong>产品名称</strong>（必填）：输入客户询价的产品名称，如"不锈钢法兰盘 DN50"。</li>
+          <li><strong>客户</strong>（必填）：从下拉框选择已有客户，或在主数据中先添加。</li>
+          <li><strong>数量</strong>（必填）：客户询单数量，默认为100，可通过上下按钮或直接输入修改。</li>
+          <li><strong>毛利率(%)</strong>：期望毛利率，默认20%，AI核价完成后可根据建议调整。</li>
+          <li><strong>备注</strong>：填写特殊工艺要求、付款条件、交期等补充说明。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">点击 <strong>「创 建」</strong> 按钮，报价单以"草稿"状态保存到列表中。</div>
+    </div>
+
+    <h3 id="ch3-3">3.3 AI核价（智能成本测算）</h3>
+    <p>这是本系统最核心的AI能力——基于产品特征、BOM结构、工艺路线，自动测算综合成本并给出建议报价。</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">在报价单列表中，找到需要核价的草稿报价单，点击操作列中的 <strong>🤖「AI核价」</strong> 按钮。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">系统开始调用AI核价引擎，此过程通常需要3-10秒（首次可能稍长），会显示"AI正在分析产品工艺..."的进度提示。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">核价完成后，系统自动填入成本明细：
+        <ul>
+          <li>📦 材料成本：原材料+辅料成本</li>
+          <li>🔧 人工成本：各工序工时 × 工时单价</li>
+          <li>⚙️ 机台成本：设备使用时间 × 机台费率</li>
+          <li>⚡ 能耗成本：预估水电能耗</li>
+          <li>📦 包装物流成本：包装材料+运费估算</li>
+          <li>🏭 管理费用分摊：按比例分摊的管理成本</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">系统根据"目标毛利率"自动计算<strong>建议报价</strong>，您可以在报价详情页手动调整各项成本或毛利率后保存。</div>
+    </div>
+
+    <div class="tip">每次AI核价消耗1次算力（约2元），请确保算力余额充足。核价结果仅供参考，特殊工艺或非标产品建议人工复核。</div>
+
+    <h3 id="ch3-4">3.4 报价单状态流转</h3>
+    <table>
+      <tr><th>状态</th><th>标签颜色</th><th>含义</th><th>可执行操作</th></tr>
+      <tr><td><span class="tag draft">草稿</span></td><td>灰色</td><td>刚创建，尚未核价</td><td>AI核价 / 编辑 / 删除</td></tr>
+      <tr><td><span class="tag submitted">已核价</span></td><td>蓝色</td><td>AI核价完成，待提交审核</td><td>查看详情 / 修改 / 提交审核</td></tr>
+      <tr><td><span class="tag approved">已审核</span></td><td>绿色</td><td>老板审核通过，可发给客户</td><td>导出PDF / 转订单</td></tr>
+      <tr><td><span class="tag rejected">已驳回</span></td><td>红色</td><td>审核不通过，需修改后重新提交</td><td>修改后重新提交</td></tr>
+      <tr><td><span class="tag converted">已转订单</span></td><td>紫色</td><td>客户确认报价，已生成正式订单</td><td>在订单跟踪中查看</td></tr>
+    </table>
+
+    <p><strong>提交审核：</strong>业务员核价完成后，点击「📤 提交」按钮将报价单提交给老板审核。</p>
+    <p><strong>老板审核：</strong>老板账号登录后，可看到待审核的报价单，点击进入详情页审核，通过则报价生效，驳回则附上原因退回业务员修改。</p>
+    <p><strong>转订单：</strong>客户确认接受报价后，在已审核的报价单上点击「转订单」按钮，系统自动创建对应订单并流转到订单跟踪模块。</p>
+  </div>
+
+  <!-- ===== 第4章 ===== -->
+  <div class="chapter" id="ch4">
+    <h2>第四章　订单跟踪</h2>
+    <p>客户确认报价后，报价单转化为正式订单，进入订单跟踪模块进行生产全流程管理。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/05-orders.png" alt="订单跟踪列表" />
+      <div class="caption">图4-1：订单跟踪页面</div>
+    </div>
+
+    <h3>4.1 订单列表</h3>
+    <p>列表展示所有订单，支持按订单号、产品名称、客户进行搜索筛选。每列字段说明：</p>
+    <ul>
+      <li><strong>订单号</strong>：系统自动生成，格式为 ORD + 日期 + 序号（如 ORD20260625001）。</li>
+      <li><strong>产品 / 客户 / 数量 / 金额</strong>：从报价单自动带入。</li>
+      <li><strong>状态</strong>：当前生产进度状态。</li>
+      <li><strong>交货期</strong>：承诺给客户的交货日期，临近交期时系统标黄提醒，超期标红。</li>
+    </ul>
+
+    <h3>4.2 订单状态说明</h3>
+    <table>
+      <tr><th>状态</th><th>说明</th><th>操作要点</th></tr>
+      <tr><td>🆕 待排产</td><td>刚从报价转化，尚未安排生产计划</td><td>点击"排产"安排生产计划和开工时间</td></tr>
+      <tr><td>🏭 生产中</td><td>车间已开工生产</td><td>可更新生产进度百分比</td></tr>
+      <tr><td>✅ 已完成</td><td>生产完工，待发货</td><td>点击"发货"录入物流信息</td></tr>
+      <tr><td>🚚 已发货</td><td>货物已发出，在途运输</td><td>等待客户签收，录入物流跟踪号</td></tr>
+      <tr><td>🎉 已签收</td><td>客户确认收货</td><td>提醒财务跟进收款</td></tr>
+    </table>
+
+    <div class="tip">订单状态变更会自动同步到工作台的"最近动态"，老板随时掌握订单进展，无需反复询问业务员。</div>
+  </div>
+
+  <!-- ===== 第5章 ===== -->
+  <div class="chapter" id="ch5">
+    <h2>第五章　成本核算与利润分析</h2>
+    <p>财务和老板最关心的"到底赚了多少钱"，通过成本核算模块一目了然。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/06-cost.png" alt="成本核算页面" />
+      <div class="caption">图5-1：成本核算与利润分析页面</div>
+    </div>
+
+    <h3>5.1 顶部经营指标</h3>
+    <table>
+      <tr><th>指标</th><th>计算方式</th></tr>
+      <tr><td>本月收款</td><td>当月实际到账的所有客户回款合计</td></tr>
+      <tr><td>本月成本</td><td>当月所有已支出的成本（材料采购+人工+费用）</td></tr>
+      <tr><td>本月利润</td><td>本月收款 - 本月成本</td></tr>
+      <tr><td>利润率</td><td>本月利润 ÷ 本月收款 × 100%</td></tr>
+    </table>
+
+    <h3>5.2 利润趋势图</h3>
+    <p>展示近6个月的收入、成本、利润三条曲线对比，帮助老板发现经营趋势变化：</p>
+    <ul>
+      <li>📈 收入/利润持续上升：经营状况良好，考虑扩产。</li>
+      <li>📉 成本上升快于收入：需排查材料采购成本或人工效率问题。</li>
+      <li>➖ 利润率持续走低：需要重新审视报价策略或降本增效。</li>
+    </ul>
+
+    <h3>5.3 成本记录</h3>
+    <p>切换到"成本记录"标签页，可以逐笔登记工厂的各项支出：</p>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">点击 <strong>「+ 记一笔成本」</strong> 按钮。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">选择成本类型：材料采购 / 人工工资 / 设备折旧 / 水电房租 / 包装物流 / 其他费用。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">选择关联订单（可选，材料类成本建议关联到具体订单以便核算单品利润），填写金额、描述和日期。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">点击"保存"，成本记录立即反映在当月利润统计中。</div>
+    </div>
+
+    <h3>5.4 收款记录</h3>
+    <p>切换到"收款记录"标签页，登记客户回款：</p>
+    <ul>
+      <li>选择对应订单，填写收款金额、收款方式（银行转账/现金/微信/支付宝等）、收款日期。</li>
+      <li>支持一笔订单多次收款（预付款/到货款/质保金），系统自动汇总已收金额和未收余额。</li>
+    </ul>
+
+    <div class="note">通过成本和收款的精细化登记，系统能精确计算每笔订单的实际利润（而不仅是报价时的预估利润），帮助老板识别哪些客户/产品最赚钱。</div>
+  </div>
+
+  <!-- ===== 第6章 ===== -->
+  <div class="chapter" id="ch6">
+    <h2>第六章　AI算力充值与消费记录</h2>
+    <p>AI核价功能按次计费（约2元/次），需要提前充值算力点数。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/07-billing.png" alt="算力充值页面" />
+      <div class="caption">图6-1：算力充值页面（套餐选择与消费记录）</div>
+    </div>
+
+    <h3>6.1 余额信息区</h3>
+    <ul>
+      <li><strong>算力余额</strong>：当前账户剩余可用金额（元）。</li>
+      <li><strong>剩余核价次数</strong>：根据余额折算的可核价次数。</li>
+      <li><strong>累计充值 / 已使用次数 / 累计消费</strong>：历史汇总数据。</li>
+    </ul>
+
+    <h3>6.2 充值套餐</h3>
+    <p>系统提供四档固定套餐，购买越多单价越优惠：</p>
+    <table>
+      <tr><th>套餐</th><th>价格</th><th>核价次数</th><th>单次价格</th><th>适合企业</th></tr>
+      <tr><td>基础版</td><td>¥99</td><td>50次</td><td>¥1.98/次</td><td>月报价量少的小型工厂</td></tr>
+      <tr><td>专业版</td><td>¥499</td><td>300次</td><td>¥1.66/次</td><td>月报价20-50单的工厂（推荐）</td></tr>
+      <tr><td>企业版</td><td>¥1499</td><td>1000次</td><td>¥1.50/次</td><td>业务量大的中型工厂</td></tr>
+      <tr><td>旗舰版</td><td>¥4999</td><td>4000次</td><td>¥1.25/次</td><td>大规模工厂/工贸一体企业</td></tr>
+    </table>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">选择合适套餐，点击套餐卡片。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">点击 <strong>「立即充值」</strong> 按钮，弹出支付窗口。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">选择支付方式（微信/支付宝/对公转账），扫码或完成转账后系统自动到账。</div>
+    </div>
+
+    <h3>6.3 交易记录与AI消费记录</h3>
+    <p>页面下方分两个表格：</p>
+    <ul>
+      <li><strong>交易记录</strong>：展示所有充值订单（订单号、套餐、金额、支付方式、状态、时间）。</li>
+      <li><strong>AI消费记录</strong>：展示每次AI核价的消耗明细（时间、服务类型、关联报价单、消耗金额、消耗次数、状态），方便财务对账。</li>
+    </ul>
+
+    <div class="warning">当算力余额不足5次时，工作台的算力余额卡片会显示黄色预警；余额为0时AI核价按钮将变灰不可用，请及时充值以免影响业务。</div>
+  </div>
+
+  <!-- ===== 第7章 ===== -->
+  <div class="chapter" id="ch7">
+    <h2>第七章　ERP系统对接与数据同步</h2>
+    <p>如果工厂已经在使用ERP系统（如用友U8/金蝶K3/鼎捷/管家婆等），可以通过本模块实现双向数据同步，避免重复录入。</p>
+
+    <div class="screenshot">
+      <img src="/screenshots/08-erp.png" alt="ERP同步配置页面" />
+      <div class="caption">图7-1：ERP系统连接配置与数据同步页面</div>
+    </div>
+
+    <h3>7.1 连接状态区</h3>
+    <p>顶部三个状态指标：</p>
+    <ul>
+      <li><strong>ERP连接状态</strong>：未配置 / 连接失败 / 已连接（显示绿色✓）。</li>
+      <li><strong>最近同步</strong>：上次成功同步的时间，"从未"表示尚未同步过。</li>
+      <li><strong>同步间隔</strong>：自动同步的时间间隔，默认60分钟。</li>
+    </ul>
+
+    <h3>7.2 配置ERP连接</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>选择ERP类型</strong>：从下拉框选择您使用的ERP品牌（支持用友、金蝶、鼎捷、管家婆、SAP Business One、通用OpenAPI等）。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">填写<strong>连接信息</strong>：
+        <ul>
+          <li>名称：给这个ERP连接起个名字（如"公司用友U8主库"）。</li>
+          <li>API地址：ERP开放接口的URL地址（由IT管理员或ERP服务商提供）。</li>
+          <li>AppKey / AppSecret：接口鉴权凭证（类似账号密码，请妥善保管）。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">勾选<strong>同步选项</strong>：
+        <ul>
+          <li>同步客户：从ERP拉取客户档案到本平台</li>
+          <li>同步物料：从ERP拉取物料主数据和最新采购价格</li>
+          <li>同步工序：从ERP拉取工艺路线和工时标准</li>
+          <li>同步订单：将本平台确认的订单自动推送到ERP生成销售订单</li>
+          <li>自动推送报价：报价审核通过后自动推送到ERP</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">设置<strong>同步间隔</strong>（分钟），建议设置为30-60分钟，太频繁会增加ERP服务器压力。</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">点击 <strong>「测试连接」</strong> 按钮验证配置是否正确，提示"连接成功"后再点击 <strong>「保存配置」</strong>。</div>
+    </div>
+
+    <h3>7.3 执行同步</h3>
+    <ul>
+      <li><strong>立即同步全部</strong>：按照勾选的同步选项，立刻执行一次全量同步。</li>
+      <li><strong>快捷同步按钮</strong>：可单独同步客户/物料/工序/订单，无需等待自动同步周期。</li>
+    </ul>
+
+    <h3>7.4 同步日志</h3>
+    <p>页面下方的"同步日志"表格记录每一次同步的详细信息：时间、数据类型（客户/物料/订单等）、方向（推送/拉取）、状态（成功/失败）、结果摘要、耗时。如出现失败，可查看"错误"列的具体原因，排查后重新同步。</p>
+
+    <div class="note">ERP对接涉及企业核心数据，请由IT管理员或在ERP服务商指导下完成配置。首次同步前建议先在测试环境验证，确认数据映射正确后再启用生产环境的自动同步。</div>
+  </div>
+
+  <!-- ===== 第8章 ===== -->
+  <div class="chapter" id="ch8">
+    <h2>第八章　常见问题（FAQ）</h2>
+
+    <h3>Q1：AI核价的结果准确吗？能否完全信任？</h3>
+    <p>AI核价基于您维护的物料价格、工序工时机台费率等主数据进行计算，准确率在85%-95%之间。建议以下场景仍需人工复核：</p>
+    <ul>
+      <li>首次生产的全新产品（缺乏历史数据参考）。</li>
+      <li>特殊材质、特殊工艺要求的非标产品。</li>
+      <li>原材料价格剧烈波动时期（建议先更新物料单价再核价）。</li>
+      <li>数量特别大或特别小的订单（规模效应/小批量额外成本需人工判断）。</li>
+    </ul>
+
+    <h3>Q2：系统数据安全吗？会不会泄露客户信息？</h3>
+    <p>系统采用银行级数据加密存储，传输全程HTTPS加密。企业数据逻辑隔离，每个企业只能访问自己的数据。我们承诺不会将您的客户信息、价格数据泄露给任何第三方。</p>
+
+    <h3>Q3：如果断网或服务器维护，会影响业务吗？</h3>
+    <p>系统部署在高可用云服务器上，可用性99.9%以上。计划维护会提前通知并安排在非工作时间（如周末深夜）。建议关键报价数据可导出PDF本地备份。</p>
+
+    <h3>Q4：可以多人同时使用吗？账号数量有限制吗？</h3>
+    <p>支持多人同时登录使用，系统不限制账号数量。建议按实际岗位创建员工账号（老板/业务员/财务），通过权限控制保障数据安全。</p>
+
+    <h3>Q5：AI算力充值后没用完可以退款吗？</h3>
+    <p>充值后算力点数永久有效（不清零），支持在不同报价单中反复使用。如需退款请联系客服，未使用部分支持原路退还（已使用部分按原价扣除）。</p>
+
+    <h3>Q6：手机上能用吗？有没有APP？</h3>
+    <p>系统采用响应式设计，手机浏览器直接访问即可使用，无需下载安装APP。老板在外也能随时手机审批报价、查看利润数据。</p>
+
+    <h3>Q7：之前在Excel里做的报价单能导入吗？</h3>
+    <p>支持Excel批量导入客户和物料主数据。历史报价单可通过"复制+新建"快速迁移，或联系客服协助批量导入。</p>
+
+    <div class="tip" style="margin-top:30px;">
+      如遇到本手册未覆盖的问题，请联系客服获取技术支持。客服邮箱：support@factory-ai.com　|　服务时间：工作日 9:00-18:00
+    </div>
+  </div>
+
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  🏭 工厂AI SaaS 平台 · 让每一笔报价都有AI的智慧支撑<br/>
+  © 2026 Factory AI SaaS. 本手册为系统配套文档，内容随产品迭代更新。
+</div>
+
+<!-- 回到顶部按钮 -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  window.addEventListener('scroll', function() {
+    document.getElementById('backTop').style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+</script>
+
+</body>
+</html>
